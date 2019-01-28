@@ -6,26 +6,46 @@
 </head>
 <body>
     <div id="main">
-        <div v-if="images.length" v-for="image in images">
-            <img :src="image.url"/>
-            <p>{{image.title}}</p>
+        <div class="header">
+            <h2>Image Hub</h2>
+            <div class="searchbar">
+                <input class="inputfield" v-model = "form.name" type="text" name="name" placeholder="name">
+                <input class="inputfield" v-model = "form.title" type="text" name="title" placeholder="title">
+                <input class="inputfield" v-model = "form.description" type="text" name="description" placeholder="description">
+                <input class="inputfield" id ="file" type="file" accept="image/*">
+                <button @click="uploadFile">Upload</button>
+            </div>
         </div>
+
+            <div v-if="images.length" v-for="image in images" @click="showmodal(image.id)" class="card">
+                    <img :src="image.url">
+                    <p> {{image.title}} </p>
+            </div>
+
+        <image-modal v-if="currentImage" :id="currentImage" @close="hidemodal"></image-modal>
     </div>
-    <!-- it's not viewing any thing on the page!! what's the problem?????? -->
+    <script id="modal-template" type="text/x-template">
+        <div class="modal">
+            <img :src="imageinfo.url" class="modalimage">
+            <button @click="$emit('close')" class="closebutton">Close</button>
+            <div class="commentboard">
+                <input v-model="comment" id="comment" palceholder="" name="" type="text"></input>
+                <input v-model="username" id="username" palceholder="username" name="username" type="text"></input>
+
+                <button @click="addComment" class="commentbutton" >comment</button>
+
+            </div>
+            <div v-if="comments.length > 0" v-for="comment in comments" >
+                <ul>
+                    <li class="comments"> {{comment.comments}} </li>
+                </ul>
+            </div>
+        </div>
+    </script>
 
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/script.js"></script>
-
-
     </script>
 </body>
 </html>
-<!-- <form class="" action="index.html" method="post">
-    <input v-model = "form.title" type="text" name="title" placeholder="title">
-    <input v-model = "form.name" type="text" name="name" placeholder="name">
-    <input v-model = "form.description" type="text" name="description" placeholder="description">
-
-    <input id ="file" type="file" accept="image/*">
-    <button @click="uploadfile">Upload</button>
-</form> -->
